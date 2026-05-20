@@ -13,11 +13,13 @@
 
     <h1>Bem-vinda, manicure!</h1>
 
-    <!-- Upload estilizado -->
+    <!-- Upload estilizado com câmera -->
     <div class="custom-file-upload">
       <label for="handPhoto" class="upload-btn">Escolher Foto da Mão</label>
-      <input type="file" id="handPhoto" accept="image/*">
+      <input type="file" id="handPhoto" accept="image/*" capture="environment">
     </div>
+
+    <!-- Preview da mão -->
     <img id="preview" src="" alt="Pré-visualização da mão" hidden>
 
     <!-- Seleção de preferências -->
@@ -43,9 +45,13 @@
       <option value="glitter">Glitter discreto</option>
     </select>
 
-    <!-- Botões -->
+    <!-- Botão gerar imagem -->
     <button id="generateBtn">Gerar Imagem</button>
+
+    <!-- Imagem gerada -->
     <img id="generatedImage" src="" alt="Imagem gerada" hidden>
+
+    <!-- Envio WhatsApp -->
     <button id="whatsappBtn" hidden>Enviar WhatsApp</button>
   </div>
 
