@@ -1,4 +1,5 @@
 // script.js
+
 const handPhoto = document.getElementById('handPhoto');
 const preview = document.getElementById('preview');
 const generateBtn = document.getElementById('generateBtn');
@@ -7,16 +8,20 @@ const whatsappBtn = document.getElementById('whatsappBtn');
 
 let selectedFile = null;
 
-// Pré-visualização da mão
+// Preview da mão usando FileReader
 handPhoto.addEventListener('change', function() {
   selectedFile = this.files[0];
-  if(selectedFile) {
-    preview.src = URL.createObjectURL(selectedFile);
-    preview.hidden = false;
+  if (selectedFile) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      preview.src = e.target.result;
+      preview.hidden = false;
+    };
+    reader.readAsDataURL(selectedFile);
   }
 });
 
-// Função para converter imagem em base64
+// Converte arquivo em base64 para enviar ao serverless
 function fileToBase64(file) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -26,7 +31,7 @@ function fileToBase64(file) {
   });
 }
 
-// Geração via serverless
+// Geração de imagem via serverless
 generateBtn.addEventListener('click', async function() {
   if (!selectedFile) return alert("Escolha uma foto da mão.");
 
@@ -34,16 +39,21 @@ generateBtn.addEventListener('click', async function() {
   const color = document.getElementById('nailColor').value;
   const style = document.getElementById('nailStyle').value;
 
+  if (!shape || !color || !style) return alert("Selecione formato, cor e estilo da unha.");
+
   const prompt = `Transforme esta unha em: formato ${shape}, cor ${color}, estilo ${style}`;
 
   try {
     const imageBase64 = await fileToBase64(selectedFile);
 
+    // Chamada para a função serverless
     const res = await fetch('/.netlify/functions/generate', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ prompt, imageBase64 })
     });
+
+    if (!res.ok) throw new Error("Erro ao gerar imagem");
 
     const data = await res.json();
     generatedImage.src = data.image;
@@ -52,12 +62,14 @@ generateBtn.addEventListener('click', async function() {
 
   } catch (err) {
     alert("Erro ao gerar a imagem: " + err.message);
+    console.error(err);
   }
 });
 
-// Envio WhatsApp
+// Envio para WhatsApp
 whatsappBtn.addEventListener('click', function() {
-  const phone = 'SEUNUMERO';
+  const phone = 'SEUNUMERO'; // coloque aqui o número do studio
+  // Observação: WhatsApp não aceita base64; futuramente, use link público da imagem
   const msg = encodeURIComponent('Quero fazer essa unha! ' + generatedImage.src);
   window.open(`https://wa.me/${phone}?text=${msg}`, '_blank');
 });
