@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nail Dreams - Studio</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <!-- Logo -->
+    <img src="assets/imagens/logo.png" alt="Logo Nail Dreams" class="logo">
+
+    <h1>Bem-vinda, manicure!</h1>
+
+    <!-- Upload estilizado -->
+    <div class="custom-file-upload">
+      <label for="handPhoto" class="upload-btn">Escolher Foto da Mão</label>
+      <input type="file" id="handPhoto" accept="image/*">
+    </div>
+    <img id="preview" src="" alt="Pré-visualização da mão" hidden>
+
+    <!-- Seleção de preferências -->
+    <select id="nailShape">
+      <option value="">Formato da unha</option>
+      <option value="quadrada">Quadrada</option>
+      <option value="oval">Oval</option>
+      <option value="stiletto">Stiletto</option>
+    </select>
+
+    <select id="nailColor">
+      <option value="">Cor da unha</option>
+      <option value="nude">Nude</option>
+      <option value="rosa">Rosa</option>
+      <option value="vermelho">Vermelho</option>
+      <option value="azul">Azul</option>
+    </select>
+
+    <select id="nailStyle">
+      <option value="">Estilo</option>
+      <option value="francesinha">Francesinha</option>
+      <option value="ombré">Ombré</option>
+      <option value="glitter">Glitter discreto</option>
+    </select>
+
+    <!-- Botões -->
+    <button id="generateBtn">Gerar Imagem</button>
+    <img id="generatedImage" src="" alt="Imagem gerada" hidden>
+    <button id="whatsappBtn" hidden>Enviar WhatsApp</button>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
