@@ -1,5 +1,4 @@
 // script.js
-
 const handPhoto = document.getElementById('handPhoto');
 const preview = document.getElementById('preview');
 const generateBtn = document.getElementById('generateBtn');
@@ -8,7 +7,7 @@ const whatsappBtn = document.getElementById('whatsappBtn');
 
 let selectedFile = null;
 
-// Preview da mão usando FileReader
+// Preview da mão
 handPhoto.addEventListener('change', function() {
   selectedFile = this.files[0];
   if (selectedFile) {
@@ -21,7 +20,7 @@ handPhoto.addEventListener('change', function() {
   }
 });
 
-// Converte arquivo em base64 para enviar ao serverless
+// Converte arquivo em base64
 function fileToBase64(file) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -46,17 +45,19 @@ generateBtn.addEventListener('click', async function() {
   try {
     const imageBase64 = await fileToBase64(selectedFile);
 
-    // Chamada para a função serverless
     const res = await fetch('/.netlify/functions/generate', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ prompt, imageBase64 })
     });
 
-    if (!res.ok) throw new Error("Erro ao gerar imagem");
+    if (!res.ok) {
+      const text = await res.text();
+      throw new Error(text);
+    }
 
     const data = await res.json();
-    generatedImage.src = data.image;
+    generatedImage.src = data.image; // link público Imgur
     generatedImage.hidden = false;
     whatsappBtn.hidden = false;
 
@@ -66,10 +67,9 @@ generateBtn.addEventListener('click', async function() {
   }
 });
 
-// Envio para WhatsApp
+// Envio WhatsApp
 whatsappBtn.addEventListener('click', function() {
-  const phone = 'SEUNUMERO'; // coloque aqui o número do studio
-  // Observação: WhatsApp não aceita base64; futuramente, use link público da imagem
+  const phone = 'SEUNUMERO';
   const msg = encodeURIComponent('Quero fazer essa unha! ' + generatedImage.src);
   window.open(`https://wa.me/${phone}?text=${msg}`, '_blank');
 });
